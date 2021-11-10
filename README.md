@@ -29,5 +29,51 @@ Esse microsserviço permite manter uma base de dados de cadastro de clientes, co
 > /CustomerManagement
 **Method:** GET
 
+> /CustomerManagement
+**Method:** POST
 
+- Request
+```json
+
+{
+  "address": [
+    {
+      "city": "Curitiba",
+      "country": "BRA",      
+      "state": "Paraná",
+	  "neighborhood": "Batel",
+      "street": "Bento Viana",
+      "streetNumber": "1250"
+    },
+	{
+      "city": "Curitiba",
+      "country": "BRA",      
+      "state": "Paraná",
+	  "neighborhood": "Centro",
+      "street": "Rua Visconde de Nácar",
+      "streetNumber": "2161"
+    }
+  ],
+  "birthdate": "1980-01-28",
+  "contacts": [
+    {
+      "emailAddress": "josematos@gmail.com",
+      "phoneNumber": "41991080058",
+      "preferred": true
+    },
+	{
+      "emailAddress": "jmatos@company.com",
+      "phoneNumber": "4121219100",
+      "preferred": false
+    }
+  ],
+  "documentNumber": "66341413000148",
+  "documentType": "PJ",  
+  "name": "Jose Matos "
+}
+
+```
+
+- Response
+201 - Created
 
