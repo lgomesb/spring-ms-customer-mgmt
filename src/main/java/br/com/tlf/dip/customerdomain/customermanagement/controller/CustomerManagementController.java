@@ -43,6 +43,8 @@ public class CustomerManagementController {
 	}
 	
 	@GetMapping(value = "/customer/{id}")
+	@ApiOperation( "Consultar cliente por ID" )
+	@ApiResponses( value = { @ApiResponse( code = 201, message = "Cliente cadastrado com sucesso.", response = Void.class) } )	
 	public ResponseEntity<CustomerOutDTO> findById( @PathVariable Integer id ) throws Exception {		
 		CustomerOutDTO outDTO = new CustomerOutDTO(service.findById(id));		
 		return ResponseEntity.ok(outDTO);

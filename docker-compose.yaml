@@ -23,7 +23,7 @@ services:
             - "MYSQL_ROOT_PASSWORD=102030"
             - "MYSQL_USER=mysql"
             - "MYSQL_PASSWORD=123456"
-            - "MYSQL_DATABASE=integracao_jira"
+            - "MYSQL_DATABASE=customermanagement"
         volumes: 
             - C:/docker/volume/customermanagement/mysql:/var/lib/mysql
         ports: 
