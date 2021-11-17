@@ -20,19 +20,23 @@ import br.com.tlf.dip.customerdomain.customermanagement.dto.in.CustomerInDTO;
 import br.com.tlf.dip.customerdomain.customermanagement.dto.out.CustomerOutDTO;
 import br.com.tlf.dip.customerdomain.customermanagement.model.Customer;
 import br.com.tlf.dip.customerdomain.customermanagement.service.CustomerManagementService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 
 @RestController
-@RequestMapping( value = "/customermanagement")
+@RequestMapping( value = "/customerdomain/customermanagement/v1")
+@Api( tags = "Customer")
 public class CustomerManagementController {
 	
 	@Autowired
 	private CustomerManagementService service;
 	
-	@GetMapping
+	@GetMapping(value = "/customers")
+	@ApiOperation( "Lista todos os clientes cadastrados" )
+	@ApiResponses( value = { @ApiResponse( code = 200, message = "Sucesso.", response = CustomerOutDTO.class) , } )
 	public ResponseEntity<List<CustomerOutDTO>> findAll() {
 		
 		List<Customer> customers = service.findAll();
@@ -42,9 +46,9 @@ public class CustomerManagementController {
 		
 	}
 	
-	@GetMapping(value = "/customer/{id}")
+	@GetMapping(value = "/customers/{id}")
 	@ApiOperation( "Consultar cliente por ID" )
-	@ApiResponses( value = { @ApiResponse( code = 201, message = "Cliente cadastrado com sucesso.", response = Void.class) } )	
+	@ApiResponses( value = { @ApiResponse( code = 200, message = "Sucesso.", response = CustomerOutDTO.class) } )	
 	public ResponseEntity<CustomerOutDTO> findById( @PathVariable Integer id ) throws Exception {		
 		CustomerOutDTO outDTO = new CustomerOutDTO(service.findById(id));		
 		return ResponseEntity.ok(outDTO);
@@ -52,11 +56,11 @@ public class CustomerManagementController {
 	}
 	
 	
-	@PostMapping
+	@PostMapping(value = "/customers")
 	@ApiOperation( "Cadastrar novo cliente" )
 	@ApiResponses( value = { @ApiResponse( code = 201, message = "Cliente cadastrado com sucesso.", response = Void.class) } )
-	public ResponseEntity<Void> insert( @RequestBody CustomerInDTO dto) throws Exception {		
-		Customer customer = service.insert(dto.getCustomer());
+	public ResponseEntity<Void> insert( @RequestBody CustomerInDTO customerDTO) throws Exception {		
+		Customer customer = service.insert(customerDTO.getCustomer());
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
@@ -66,13 +70,17 @@ public class CustomerManagementController {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@PatchMapping( value = "/customer/{id}")
-	public ResponseEntity<Void> update(@PathVariable Integer id,  @RequestBody(required = true) CustomerInDTO dto) throws Exception {		
-		service.update(id, dto.getCustomer());
+	@PatchMapping( value = "/customers/{id}")
+	@ApiOperation( "Atualiza parcialmente um cliente" )
+	@ApiResponses( value = { @ApiResponse( code = 204, message = "Cliente atualizado com sucesso.", response = Void.class) } )
+	public ResponseEntity<Void> update(@PathVariable Integer id,  @RequestBody(required = true) CustomerInDTO customerDTO) throws Exception {		
+		service.update(id, customerDTO.getCustomer());
 		return ResponseEntity.noContent().build();
 	}
 	
-	@DeleteMapping( value = "/{id}")
+	@DeleteMapping( value = "/customers/{id}")
+	@ApiOperation( "Deleta um cliente" )
+	@ApiResponses( value = { @ApiResponse( code = 204, message = "Cliente excluido com sucesso.", response = Void.class) } )
 	public ResponseEntity<Void> delete( @PathVariable Integer id) throws Exception {
 		service.delete(id);		
 		return ResponseEntity.noContent().build();

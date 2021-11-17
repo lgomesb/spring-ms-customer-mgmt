@@ -2,11 +2,16 @@ package br.com.tlf.dip.customerdomain.customermanagement.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.tlf.dip.customerdomain.customermanagement.model.Address;
+import br.com.tlf.dip.customerdomain.customermanagement.model.ContactMedium;
 import br.com.tlf.dip.customerdomain.customermanagement.model.Customer;
+import br.com.tlf.dip.customerdomain.customermanagement.repository.AddressRepository;
+import br.com.tlf.dip.customerdomain.customermanagement.repository.ContactMediumRepository;
 import br.com.tlf.dip.customerdomain.customermanagement.repository.CustomerRepository;
 import javassist.tools.rmi.ObjectNotFoundException;
 
@@ -15,6 +20,13 @@ public class CustomerManagementService {
 	
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private ContactMediumRepository contactMediumRepository;
+	
+	@Autowired
+	private AddressRepository addressRepository;
+	
 	
 	public List<Customer> findAll() {
 		
@@ -32,6 +44,7 @@ public class CustomerManagementService {
 		customer.setLastUpdate(LocalDateTime.now());
 		customer.getAddress().forEach( a -> {a.setCustomer(customer); a.setCreationDate(LocalDateTime.now());} );
 		customer.getContacts().forEach( c -> {c.setCustomer(customer); c.setCreationDate(LocalDateTime.now());} );
+		
 		return customerRepository.save(customer);
 	}
 	
@@ -41,12 +54,27 @@ public class CustomerManagementService {
 		newCustomer.setBirthdate(customer.getBirthdate());
 		newCustomer.setDocumentNumber(customer.getDocumentNumber());
 		newCustomer.setDocumentType(customer.getDocumentType());
-		newCustomer.setAddress(customer.getAddress());
-		newCustomer.setContacts(customer.getContacts());
 		newCustomer.setInactive(customer.getInactive());
-		newCustomer.setLastUpdate(LocalDateTime.now());		
+		
+		List<ContactMedium> contacts = newCustomer.getContacts().stream().map(c -> c).collect(Collectors.toList());
+		List<Address> address = newCustomer.getAddress().stream().map(a -> a).collect(Collectors.toList());
+		
+		newCustomer.setAddress(null);
+		newCustomer.setContacts(null);
 		
 		customerRepository.save(newCustomer);
+		contactMediumRepository.deleteAll(contacts);
+		addressRepository.deleteAll(address);
+		
+		newCustomer.setAddress(customer.getAddress());
+		newCustomer.setContacts(customer.getContacts());
+		
+		newCustomer.getAddress().forEach( a -> {a.setCustomer(newCustomer); a.setCreationDate(LocalDateTime.now());} );
+		newCustomer.getContacts().forEach( c -> {c.setCustomer(newCustomer); c.setCreationDate(LocalDateTime.now());} );
+		newCustomer.setLastUpdate(LocalDateTime.now());		
+
+		customerRepository.save(newCustomer);		
+		
 	}
 	
 	public void delete(Integer id) throws Exception { 

@@ -5,13 +5,14 @@ services:
         build: .
         container_name: customermanagement
         ports: 
-            - "8080:8080"
+            - "9090:9090"
         networks: 
             - frontend
             - backend
         environment: 
             - "USER_DATABASE=mysql"
             - "PASSWORD_DATABASE=123456"
+            - "ENVIRONMENT=prod"
         restart: always
 
     db: 
@@ -27,7 +28,7 @@ services:
         volumes: 
             - C:/docker/volume/customermanagement/mysql:/var/lib/mysql
         ports: 
-            - "3306:3306"
+            - "4417:3306"
         restart: always
 
 networks: 

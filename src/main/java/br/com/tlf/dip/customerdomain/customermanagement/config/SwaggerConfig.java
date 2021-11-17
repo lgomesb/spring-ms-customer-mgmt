@@ -29,7 +29,7 @@ public class SwaggerConfig {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("br.com.tlf.dip.customerdomain.customermanagement.controller"))
-				.paths(PathSelectors.regex("/customermanagement.*"))				
+				.paths(PathSelectors.regex("/customerdomain/customermanagement/v1.*"))				
 				.build()
 				.globalResponses(HttpMethod.GET, this.getGlobalResponses())
 				.apiInfo( metaInfo() );
