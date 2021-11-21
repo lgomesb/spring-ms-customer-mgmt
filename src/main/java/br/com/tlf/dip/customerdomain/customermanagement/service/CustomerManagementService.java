@@ -36,7 +36,7 @@ public class CustomerManagementService {
 	public Customer findById(Integer id) throws ObjectNotFoundException {
 		
 		return customerRepository.findById(id)
-				.orElseThrow(() -> new ObjectNotFoundException("Cliente com id " + id + " não encontrado"));
+				.orElseThrow(() -> new ObjectNotFoundException("Objeto nao encontrado"));
 	} 
 	
 	public Customer insert(Customer customer) {		
@@ -59,21 +59,23 @@ public class CustomerManagementService {
 		List<ContactMedium> contacts = newCustomer.getContacts().stream().map(c -> c).collect(Collectors.toList());
 		List<Address> address = newCustomer.getAddress().stream().map(a -> a).collect(Collectors.toList());
 		
+
+		customer.getAddress().forEach( a -> {a.setCustomer(newCustomer); a.setCreationDate(LocalDateTime.now());} );
+		customer.getContacts().forEach( c -> {c.setCustomer(newCustomer); c.setCreationDate(LocalDateTime.now());} );
+
 		newCustomer.setAddress(null);
 		newCustomer.setContacts(null);
-		
 		customerRepository.save(newCustomer);
 		contactMediumRepository.deleteAll(contacts);
 		addressRepository.deleteAll(address);
-		
+
 		newCustomer.setAddress(customer.getAddress());
 		newCustomer.setContacts(customer.getContacts());
-		
-		newCustomer.getAddress().forEach( a -> {a.setCustomer(newCustomer); a.setCreationDate(LocalDateTime.now());} );
-		newCustomer.getContacts().forEach( c -> {c.setCustomer(newCustomer); c.setCreationDate(LocalDateTime.now());} );
 		newCustomer.setLastUpdate(LocalDateTime.now());		
+		
+		customerRepository.save(newCustomer);
 
-		customerRepository.save(newCustomer);		
+		//		customerRepository.save(newCustomer);		
 		
 	}
 	

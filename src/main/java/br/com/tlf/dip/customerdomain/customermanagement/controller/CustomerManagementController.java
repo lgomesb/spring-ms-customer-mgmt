@@ -53,7 +53,8 @@ public class CustomerManagementController {
 	@ApiOperation( "Consultar cliente por ID" )
 	@ApiResponses( value = { @ApiResponse( code = 200, message = "Sucesso.", response = CustomerOutDTO.class) } )	
 	public ResponseEntity<CustomerOutDTO> findById( @PathVariable Integer id ) throws Exception {		
-		return ResponseEntity.ok(mapper.map(service.findById(id), CustomerOutDTO.class));
+		Customer customer = service.findById(id);
+		return ResponseEntity.ok(mapper.map(customer, CustomerOutDTO.class));
 		
 	}
 	
