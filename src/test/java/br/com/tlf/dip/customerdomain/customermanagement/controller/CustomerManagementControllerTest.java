@@ -2,7 +2,7 @@ package br.com.tlf.dip.customerdomain.customermanagement.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
@@ -73,6 +73,29 @@ class CustomerManagementControllerTest {
 		assertNotNull(response);
 		assertNotNull(response.getBody());
 		assertEquals(CustomerOutDTO.class, response.getBody().getClass());
+		assertEquals(CustomerOutDTO.class, response.getBody().getClass());
+		assertNotNull(response.getBody().getBirthdate());
+		assertNotNull(response.getBody().getDocumentNumber());
+		assertNotNull(response.getBody().getDocumentType());
+		assertNotNull(response.getBody().getName());
+		assertNotNull(response.getBody().getId());
+		assertNull(response.getBody().getInactive());
+		assertNotNull(response.getBody().getAddress());		
+		assertNotNull(response.getBody().getContacts());
+		assertEquals(1, response.getBody().getAddress().size());
+		assertEquals(1, response.getBody().getContacts().size());		
+		assertNotNull(response.getBody().getContacts().get(0));
+		assertNotNull(response.getBody().getAddress().get(0));		
+		assertNotNull(response.getBody().getAddress().get(0).getCity());		
+		assertNotNull(response.getBody().getAddress().get(0).getCountry());		
+		assertNotNull(response.getBody().getAddress().get(0).getNeighborhood());		
+		assertNotNull(response.getBody().getAddress().get(0).getState());		
+		assertNotNull(response.getBody().getAddress().get(0).getStreet());		
+		assertNotNull(response.getBody().getAddress().get(0).getStreetNumber());		
+		assertNotNull(response.getBody().getContacts().get(0).getEmailAddress());				
+		assertNotNull(response.getBody().getContacts().get(0).getPhoneNumber());				
+		assertNotNull(response.getBody().getContacts().get(0).getPreferred());				
+
 	}
 
 	@Test
@@ -135,7 +158,6 @@ class CustomerManagementControllerTest {
 		ModelMapper modelMapper = new ModelMapper();
 		this.customerInDTO = modelMapper.map(customer, CustomerInDTO.class);
 		this.customerOutDTO =  modelMapper.map(customer, CustomerOutDTO.class);
-		
 	}
 	
 }
