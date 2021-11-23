@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -86,13 +87,21 @@ class CustomerManagementControllerTest {
 	}
 
 	@Test
-	void testUpdate() {
-		fail("Not yet implemented");
+	void whenUpdateThenReturnSuccess() throws Exception {
+		doNothing().when(service).update(anyInt(), any());
+		ResponseEntity<Void> response = controller.update(ID, customerInDTO);
+		assertNotNull(response);
+		assertNotNull(response.getStatusCode());
+		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 	}
 
 	@Test
-	void testDelete() {
-		fail("Not yet implemented");
+	void whenDeleteThenReturnSuccess() throws Exception {
+		doNothing().when(service).delete(anyInt());
+		ResponseEntity<Void> response = controller.delete(ID);
+		assertNotNull(response);
+		assertNotNull(response.getStatusCode());
+		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 	}
 
 	private void startCustomer() {
