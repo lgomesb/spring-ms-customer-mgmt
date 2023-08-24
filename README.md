@@ -1,4 +1,4 @@
-# Workshop Spring Boot 
+# Customer Management API 
 
 ### **1 Contexto**
 - Caso de Uso 1 - MS Customer Management
